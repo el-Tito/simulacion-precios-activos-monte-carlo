@@ -1,4 +1,4 @@
-# Simulación de precios de activos financieros mediante métodos de Monte Carlo
+# Simulación de precios de activos financieros mediante el método de Monte Carlo: aplicación y comparación de modelos estocásticos
 
 Repositorio asociado al Trabajo Fin de Grado del Grado en Matemática Computacional de la Universidad Internacional de La Rioja (UNIR).
 
