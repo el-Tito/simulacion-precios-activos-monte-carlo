@@ -1,16 +1,18 @@
-# Estudio y comparación de modelos estocásticos para la simulación de series financieras
+# Simulación de precios de activos financieros mediante métodos de Monte Carlo
 
 Repositorio asociado al Trabajo Fin de Grado del Grado en Matemática Computacional de la Universidad Internacional de La Rioja (UNIR).
 
 ## Descripción
 
-Este proyecto estudia la aplicación de modelos estocásticos a la simulación y análisis de series temporales financieras.
+Este proyecto desarrolla un estudio sobre la simulación de precios de activos financieros mediante métodos de Monte Carlo.
 
-El trabajo se centra inicialmente en el Movimiento Browniano Geométrico (GBM), utilizado habitualmente para modelizar la evolución de activos financieros. Se estudian sus propiedades teóricas, la estimación de sus parámetros a partir de datos reales y su implementación mediante simulación de Monte Carlo.
+El trabajo se centra en la aplicación del Movimiento Browniano Geométrico (GBM) como modelo estocástico para representar la evolución temporal de los precios de activos financieros. A partir de datos históricos, se realiza la calibración de los parámetros del modelo y se generan trayectorias simuladas mediante técnicas de Monte Carlo.
 
-Posteriormente, se realiza una comparación entre diferentes enfoques. Por un lado, se compara la valoración obtenida mediante simulación de Monte Carlo con la solución analítica de Black--Scholes. Por otro lado, se compara el modelo GBM con un modelo GARCH(1,1), que permite modelizar una volatilidad variable en el tiempo.
+Asimismo, se estudia la convergencia del método de Monte Carlo y se realiza un análisis de sensibilidad respecto a los parámetros de deriva y volatilidad.
 
-El objetivo principal es analizar las ventajas y limitaciones del GBM y estudiar si la incorporación de volatilidad condicional mediante GARCH proporciona mejoras en la representación de los datos financieros.
+Como parte del análisis, se compara la valoración obtenida mediante simulación de Monte Carlo con la solución analítica de Black--Scholes. Finalmente, se incorpora un modelo GARCH(1,1) como alternativa al GBM para analizar el efecto de una volatilidad variable en el tiempo.
+
+El objetivo es estudiar las posibilidades y limitaciones de los modelos utilizados para la simulación de precios de activos financieros y evaluar el comportamiento de los diferentes enfoques considerados.
 
 ## Estructura del proyecto
 
