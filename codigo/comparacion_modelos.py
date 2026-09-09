@@ -28,8 +28,8 @@ from modelo_garch import (
 )
 
 BASE = Path(__file__).resolve().parent
-RESULTADOS = BASE / "resultados"
-FIGURAS = BASE / "figuras"
+RESULTADOS = BASE.parent / "resultados"
+FIGURAS = BASE.parent / "figuras"
 RESULTADOS.mkdir(exist_ok=True)
 FIGURAS.mkdir(exist_ok=True)
 
