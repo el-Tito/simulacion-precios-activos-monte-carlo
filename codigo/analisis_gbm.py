@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
+from statsmodels.stats.diagnostic import lilliefors
 
 from simulador_gbm import SimuladorGBM, calibrar_gbm
 
@@ -28,19 +29,28 @@ N_SIMULACIONES = 10_000
 
 def cargar_datos(path=DATA_PATH):
     """
-    Carga el CSV de Investing.com.
+       Carga el CSV de Investing.com.
 
-    El archivo puede contener precios con separadores de miles o comas.
-    La función intenta convertir la columna Price de forma robusta.
-    """
+       El archivo puede contener precios con separadores de miles o comas.
+       La función intenta convertir la columna Price de forma robusta y
+       comprueba la calidad de los datos originales antes de realizar la limpieza.
+       """
+
+    # Cargar datos originales
     df = pd.read_csv(path)
 
     if "Date" not in df.columns or "Price" not in df.columns:
-        raise ValueError("El CSV debe contener las columnas 'Date' y 'Price'.")
+        raise ValueError(
+            "El CSV debe contener las columnas 'Date' y 'Price'."
+        )
 
+    # Número de observaciones originales
+    observaciones_originales = len(df)
+
+    # Conversión de fechas
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 
-    # Conversión robusta de precio, eliminando separadores de miles.
+    # Conversión robusta del precio, eliminando separadores de miles
     precio = (
         df["Price"]
         .astype(str)
@@ -49,6 +59,16 @@ def cargar_datos(path=DATA_PATH):
     )
     df["Price"] = pd.to_numeric(precio, errors="coerce")
 
+    # Comprobación de calidad de los datos ORIGINALES
+    faltantes_originales = int(
+        df["Price"].isna().sum()
+    )
+
+    duplicados_originales = int(
+        df["Date"].duplicated().sum()
+    )
+
+    # Limpieza de los datos
     df = (
         df.dropna(subset=["Date", "Price"])
         .sort_values("Date")
@@ -56,8 +76,12 @@ def cargar_datos(path=DATA_PATH):
         .reset_index(drop=True)
     )
 
-    return df
-
+    return (
+        df,
+        observaciones_originales,
+        faltantes_originales,
+        duplicados_originales,
+    )
 
 def descripcion_datos(df):
     """Genera estadísticas básicas y comprobaciones de calidad."""
@@ -189,20 +213,14 @@ def pruebas_normalidad(df):
     )
 
     # ========================================================
-    # KOLMOGOROV-SMIRNOV
+    #  LILLIEFORS
     # ========================================================
 
-    # Se estandarizan los rendimientos antes de compararlos
-    # con una distribución normal estándar N(0,1).
-    rendimientos_estandarizados = (
-        (rendimientos - np.mean(rendimientos))
-        / np.std(rendimientos, ddof=1)
+    lillie_stat, lillie_pvalue = lilliefors(
+        rendimientos,
+        dist="norm"
     )
 
-    ks_stat, ks_pvalue = stats.kstest(
-        rendimientos_estandarizados,
-        "norm"
-    )
 
     # ========================================================
     # SHAPIRO-WILK
@@ -239,9 +257,9 @@ def pruebas_normalidad(df):
     # DECISIONES
     # ========================================================
 
-    decision_ks = (
+    decision_lilliefors  = (
         "Rechazar normalidad"
-        if ks_pvalue < 0.05
+        if lillie_pvalue < 0.05
         else "No rechazar normalidad"
     )
 
@@ -258,19 +276,19 @@ def pruebas_normalidad(df):
     tabla = pd.DataFrame(
         {
             "Prueba": [
-                "Kolmogorov-Smirnov",
+                "Lilliefors",
                 "Shapiro-Wilk",
                 "Anderson-Darling",
             ],
 
             "Estadistico": [
-                ks_stat,
+                lillie_stat,
                 shapiro_stat,
                 anderson.statistic,
             ],
 
             "p_valor": [
-                ks_pvalue,
+                lillie_pvalue,
                 shapiro_pvalue,
                 np.nan,
             ],
@@ -282,7 +300,7 @@ def pruebas_normalidad(df):
             ],
 
             "Decision_5pct": [
-                decision_ks,
+                decision_lilliefors,
                 decision_shapiro,
                 decision_anderson,
             ],
@@ -473,7 +491,12 @@ def sensibilidad(S0, T=1.0, pasos=252):
 
 
 def main():
-    df = cargar_datos()
+    (
+        df,
+        observaciones_originales,
+        faltantes_originales,
+        duplicados_originales,
+    ) = cargar_datos()
 
     info = descripcion_datos(df)
 
@@ -481,7 +504,10 @@ def main():
 
     tabla_normalidad = pruebas_normalidad(df)
 
-    print("=== DESCRIPCIÓN DE DATOS ===")
+    print("\n=== CALIDAD DE LOS DATOS ORIGINALES ===")
+    print(f"Observaciones originales: {observaciones_originales}")
+    print(f"Precios faltantes: {faltantes_originales}")
+    print(f"Fechas duplicadas: {duplicados_originales}")
 
     for k, v in info.items():
         print(f"{k}: {v}")
