@@ -28,7 +28,7 @@ TFG/
 │   └── comparacion_modelos.py
 │
 ├── datos/
-│   └── datos.csv
+│   └── datos_sp500.csv
 │
 ├── resultados/
 │   ├── descripcion_datos.csv
