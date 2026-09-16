@@ -16,10 +16,11 @@ El objetivo es estudiar las posibilidades y limitaciones de los modelos utilizad
 
 ## Estructura del proyecto
 
-```text
-TFG/
+simulacion-precios-activos-monte-carlo/
 │
 ├── README.md
+├── requirements.txt
+├── .gitignore
 │
 ├── codigo/
 │   ├── simulador_gbm.py
@@ -31,18 +32,8 @@ TFG/
 │   └── datos_sp500.csv
 │
 ├── resultados/
-│   ├── descripcion_datos.csv
-│   ├── calibracion_gbm.csv
-│   ├── validacion_gbm.csv
-│   ├── sensibilidad_mu.csv
-│   ├── sensibilidad_sigma.csv
-│   ├── convergencia_monte_carlo.csv
-│   ├── parametros_garch.csv
-│   ├── comparacion_montecarlo_black_scholes.csv
-│   └── comparacion_gbm_garch.csv
-│
 ├── figuras/
-│   └── *.png
 │
 └── memoria/
-    └── TFG.pdf
+    ├── TFG.pdf
+
