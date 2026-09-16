@@ -16,24 +16,20 @@ El objetivo es estudiar las posibilidades y limitaciones de los modelos utilizad
 
 ## Estructura del proyecto
 
+```text
 simulacion-precios-activos-monte-carlo/
-│
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-│
 ├── codigo/
 │   ├── simulador_gbm.py
 │   ├── analisis_gbm.py
 │   ├── modelo_garch.py
 │   └── comparacion_modelos.py
-│
 ├── datos/
 │   └── datos_sp500.csv
-│
 ├── resultados/
 ├── figuras/
-│
 └── memoria/
-    ├── TFG.pdf
+    └── TFG.pdf
 
